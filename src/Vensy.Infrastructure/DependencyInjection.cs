@@ -17,9 +17,22 @@ public static class DependencyInjection
         services.Configure<JwtSetting>(configuration.GetSection(JwtSetting.Name));
         services.AddDbContext<Context>();
         services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<Context>().AddDefaultTokenProviders();
+        services.Configure<IdentityOptions>(IdentityOptionsConfiguration);
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IJwtService, JwtService>();
         services.AddScoped<IDateTimeProvider, DateTimeProvider>();
         return services;
+    }
+
+    public static void IdentityOptionsConfiguration(IdentityOptions options)
+    {
+        options.Password.RequireDigit = false;
+        options.Password.RequiredUniqueChars = 0;
+        options.Password.RequiredLength = 6;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireUppercase = false;
+        options.Lockout.AllowedForNewUsers = false;
+        options.Lockout.MaxFailedAccessAttempts = 20;
+        options.User.RequireUniqueEmail = true;
     }
 }

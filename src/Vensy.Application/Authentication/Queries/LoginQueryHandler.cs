@@ -29,6 +29,7 @@ public class LoginQueryHandler : IRequestHandler<LoginQuery, ErrorOr<LoginResult
 
     public async Task<ErrorOr<LoginResult>> Handle(LoginQuery request, CancellationToken cancellationToken)
     {
+        //  Check if user login is successful
         var user = await _userManager.FindByEmailAsync(request.Username);
 
         if (user is null || !await _userManager.CheckPasswordAsync(user, request.Password))
@@ -36,6 +37,7 @@ public class LoginQueryHandler : IRequestHandler<LoginQuery, ErrorOr<LoginResult
             return Error.Custom(StatusCodes.Status401Unauthorized, code: "Invalid.Email", description: "Invalid username or password");
         };
 
+        //  get user roles
         var userRoles = await _userManager.GetRolesAsync(user);
 
         var authClaims = new List<Claim>(){
@@ -48,9 +50,11 @@ public class LoginQueryHandler : IRequestHandler<LoginQuery, ErrorOr<LoginResult
             authClaims.Add(new(ClaimTypes.Role, role));
         }
 
+        // create refresh and access tokens
         string accessToken = _jwtService.GenerateAccessToken(authClaims);
         string refreshToken = _jwtService.GenerateRefreshToken(authClaims);
 
-        return new LoginResult(user.Email!, user.Lastname, user.Firstname, user.UserName!, accessToken, refreshToken);
+        // return login result
+        return new LoginResult(user.Email ?? "", user.Lastname, user.Firstname, user.UserName ?? "", accessToken, refreshToken);
     }
 }
