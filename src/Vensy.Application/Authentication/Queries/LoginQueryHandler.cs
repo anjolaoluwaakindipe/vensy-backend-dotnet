@@ -16,10 +16,10 @@ namespace Vensy.Application.Authentication.Queries;
 
 public class LoginQueryHandler : IRequestHandler<LoginQuery, ErrorOr<LoginResult>>
 {
-    private readonly UserManager<User> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
     private readonly IJwtService _jwtService;
 
-    public LoginQueryHandler(UserManager<User> userManager, IJwtService jwtService)
+    public LoginQueryHandler(UserManager<ApplicationUser> userManager, IJwtService jwtService)
     {
         _userManager = userManager;
         _jwtService = jwtService;

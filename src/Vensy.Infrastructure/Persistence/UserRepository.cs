@@ -1,6 +1,8 @@
+using System.Reflection.Metadata;
 using System;
 using Vensy.Application.Interfaces.Persistence;
 using Vensy.Domain.Models;
+using System.Security.Principal;
 
 namespace Vensy.Infrastructure.Persistence;
 
@@ -16,12 +18,19 @@ public class UserRepository : IUserRepository
     }
 
 
-    public User? FindByEmail(string email)
+    public ApplicationUser? FindByEmail(string email)
     {
-        return _context.Users.Where<User>(user => user.Email == email).FirstOrDefault();
+        return _context.Users.Where<ApplicationUser>(user => user.Email == email).FirstOrDefault();
     }
 
-    public void Save(User user)
+    public ApplicationUser? FindUserByRefreshToken(string RefreshToken, string Email)
+    {
+        return _context.Users.Where(predicate: user => user.Email == Email && user.RefreshTokens.Any((refreshToken => refreshToken.Token == RefreshToken)))
+                             .FirstOrDefault<ApplicationUser>();
+
+    }
+
+    public void Save(ApplicationUser user)
     {
         _context.Users.Add(user);
     }

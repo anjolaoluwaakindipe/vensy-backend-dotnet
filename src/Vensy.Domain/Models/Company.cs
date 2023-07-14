@@ -1,20 +1,21 @@
 namespace Vensy.Domain.Models;
 
-public class Company {
-    public int Id { get; set;}
-    public string Name { get; set;} = string.Empty;
-    public string Email { get; set;} = string.Empty;
+public class Company
+{
+    public int Id { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
 
-    public string Phone { get; set;} = string.Empty;
+    public string Phone { get; set; } = string.Empty;
 
-    public string Address { get; set;} = string.Empty;
+    public string Address { get; set; } = string.Empty;
 
-    public int UserId { get; set;}
+    public string ApplicationUserId { get; set; } = string.Empty;
 
-    public User User {get; set;} = null!;
+    public ApplicationUser ApplicationUser { get; set; } = null!;
 
 
-    public List<Venue> Venues { get;} = new List<Venue>();
+    public List<Venue> Venues { get; } = new List<Venue>();
 
 
     public override string ToString()

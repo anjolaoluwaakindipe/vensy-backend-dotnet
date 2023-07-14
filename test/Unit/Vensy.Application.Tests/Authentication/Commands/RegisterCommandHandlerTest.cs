@@ -17,10 +17,10 @@ public class RegisterCommandHandlerTest
 
         // Arrange
         RegisterCommand registerCommand = RegisterUserCommandUtils.CreateRegisterUserCommand();
-        var newUser = new User() { Email = registerCommand.Email, Firstname = registerCommand.Firstname, Lastname = registerCommand.Lastname, UserName = registerCommand.Username };
-        var userStoreMock = new Mock<IUserStore<User>>();
-        var userManagerMoq = new Mock<UserManager<User>>(userStoreMock.Object, null, null, null, null, null, null, null, null);
-        userManagerMoq.Setup(mock => mock.CreateAsync(It.IsAny<User>(), registerCommand.Password)).ReturnsAsync(IdentityResult.Success);
+        var newUser = new ApplicationUser() { Email = registerCommand.Email, Firstname = registerCommand.Firstname, Lastname = registerCommand.Lastname, UserName = registerCommand.Username };
+        var userStoreMock = new Mock<IUserStore<ApplicationUser>>();
+        var userManagerMoq = new Mock<UserManager<ApplicationUser>>(userStoreMock.Object, null, null, null, null, null, null, null, null);
+        userManagerMoq.Setup(mock => mock.CreateAsync(It.IsAny<ApplicationUser>(), registerCommand.Password)).ReturnsAsync(IdentityResult.Success);
         RegisterCommandHandler _sut = new(userManager: userManagerMoq.Object);
 
         // Act
@@ -30,7 +30,7 @@ public class RegisterCommandHandlerTest
         Assert.NotNull(result.Value);
         Assert.IsType(typeof(RegisterResult), result.Value);
         Assert.NotEmpty(result.Value.Message);
-        userManagerMoq.Verify(mock => mock.CreateAsync(It.IsAny<User>(), registerCommand.Password), Times.Once);
+        userManagerMoq.Verify(mock => mock.CreateAsync(It.IsAny<ApplicationUser>(), registerCommand.Password), Times.Once);
     }
 
 
@@ -39,10 +39,10 @@ public class RegisterCommandHandlerTest
     {
         // Arrange
         RegisterCommand registerCommand = RegisterUserCommandUtils.CreateRegisterUserCommand();
-        var newUser = new User() { Email = registerCommand.Email, Firstname = registerCommand.Firstname, Lastname = registerCommand.Lastname, UserName = registerCommand.Username };
-        var userStoreMock = new Mock<IUserStore<User>>();
-        var userManagerMoq = new Mock<UserManager<User>>(userStoreMock.Object, null, null, null, null, null, null, null, null);
-        userManagerMoq.Setup(mock => mock.CreateAsync(It.IsAny<User>(), registerCommand.Password))
+        var newUser = new ApplicationUser() { Email = registerCommand.Email, Firstname = registerCommand.Firstname, Lastname = registerCommand.Lastname, UserName = registerCommand.Username };
+        var userStoreMock = new Mock<IUserStore<ApplicationUser>>();
+        var userManagerMoq = new Mock<UserManager<ApplicationUser>>(userStoreMock.Object, null, null, null, null, null, null, null, null);
+        userManagerMoq.Setup(mock => mock.CreateAsync(It.IsAny<ApplicationUser>(), registerCommand.Password))
                       .ReturnsAsync(IdentityResult.Failed(new IdentityError[]
                       {
                           new() { Code = "Password Failed", Description = "Something Wrong with Password" },
@@ -56,7 +56,7 @@ public class RegisterCommandHandlerTest
         // Assert
         Assert.NotNull(result.Errors);
         Assert.Equal(2, result.Errors.Count);
-        userManagerMoq.Verify(mock => mock.CreateAsync(It.IsAny<User>(), registerCommand.Password), Times.Once);
+        userManagerMoq.Verify(mock => mock.CreateAsync(It.IsAny<ApplicationUser>(), registerCommand.Password), Times.Once);
     }
 
     [Fact]
@@ -64,9 +64,9 @@ public class RegisterCommandHandlerTest
     {
         // Arrange
         RegisterCommand registerCommand = RegisterUserCommandUtils.CreateRegisterUserCommand();
-        var newUser = new User() { Email = registerCommand.Email, Firstname = registerCommand.Firstname, Lastname = registerCommand.Lastname, UserName = registerCommand.Username };
-        var userStoreMock = new Mock<IUserStore<User>>();
-        var userManagerMoq = new Mock<UserManager<User>>(userStoreMock.Object, null, null, null, null, null, null, null, null);
+        var newUser = new ApplicationUser() { Email = registerCommand.Email, Firstname = registerCommand.Firstname, Lastname = registerCommand.Lastname, UserName = registerCommand.Username };
+        var userStoreMock = new Mock<IUserStore<ApplicationUser>>();
+        var userManagerMoq = new Mock<UserManager<ApplicationUser>>(userStoreMock.Object, null, null, null, null, null, null, null, null);
         userManagerMoq.Setup(mock => mock.FindByEmailAsync(registerCommand.Email))
                       .ReturnsAsync(newUser);
         RegisterCommandHandler _sut = new(userManager: userManagerMoq.Object);

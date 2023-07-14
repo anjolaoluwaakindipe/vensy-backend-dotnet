@@ -10,10 +10,12 @@ namespace Vensy.Api.Controllers;
 [Route("api/v1/auth")]
 public class AuthenticationController : ApiControllerBase
 {
+    private readonly IHttpContextAccessor _httpContAcc;
     private readonly ISender _sender;
-    public AuthenticationController(ISender mediator)
+    public AuthenticationController(ISender mediator, IHttpContextAccessor httpContextAccessor)
     {
         _sender = mediator;
+        _httpContAcc = httpContextAccessor;
     }
 
     [HttpPost("/register")]
@@ -23,7 +25,7 @@ public class AuthenticationController : ApiControllerBase
         var response = await _sender.Send(command);
 
         return response.Match(
-            val => Ok(val),
+            val => Created("", val),
         errs => Problem(errs)
         );
     }
@@ -35,10 +37,32 @@ public class AuthenticationController : ApiControllerBase
 
         var result = await _sender.Send(query);
 
-        return result.Match(
-        val => Ok(val),
-        errs => Problem(errs)
-        );
+        if (result.IsError)
+        {
+            return Problem(result.Errors);
+        }
+
+        await _sender.Send(new UpdateUserRefreshTokenCommand(
+            _httpContAcc.HttpContext?.Request.Cookies["refreshToken"],
+            result.Value.RefreshToken,
+            result.Value.Email));
+            
+        var value = result.Value;
+
+        return Ok(new LoginResponse(
+            value.Email,
+            value.Firstname,
+            value.Lastname,
+            value.Username,
+            value.AccessToken,
+            value.RefreshToken));
+    }
+
+    [HttpPost("/refresh")]
+    public async Task<IActionResult> Refresh()
+    {
+        await Task.CompletedTask;
+        return Ok();
     }
 
 }

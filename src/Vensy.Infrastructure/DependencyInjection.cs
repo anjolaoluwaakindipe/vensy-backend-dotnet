@@ -1,4 +1,6 @@
+using System.Reflection;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Vensy.Application.Common.Interfaces.Services;
@@ -15,8 +17,13 @@ public static class DependencyInjection
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, ConfigurationManager configuration)
     {
         services.Configure<JwtSetting>(configuration.GetSection(JwtSetting.Name));
-        services.AddDbContext<Context>();
-        services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<Context>().AddDefaultTokenProviders();
+        services.Configure<PostgresDatabaseSettings>(configuration.GetSection(PostgresDatabaseSettings.PropertyName));
+        services.AddDbContext<Context>(options =>
+        {
+            var postgresSettings = configuration.GetSection(PostgresDatabaseSettings.PropertyName).Get<PostgresDatabaseSettings>();
+            options.UseNpgsql(postgresSettings?.ConnectionString()).UseCamelCaseNamingConvention();
+        });
+        services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<Context>().AddDefaultTokenProviders();
         services.Configure<IdentityOptions>(IdentityOptionsConfiguration);
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IJwtService, JwtService>();

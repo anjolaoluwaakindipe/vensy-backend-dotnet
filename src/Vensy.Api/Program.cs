@@ -11,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.Configure<JwtSetting>(builder.Configuration.GetSection("dafs"));
 builder.Services.AddAPI().AddApplication().AddInfrastructure(builder.Configuration);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -20,7 +21,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+
+
+// app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();

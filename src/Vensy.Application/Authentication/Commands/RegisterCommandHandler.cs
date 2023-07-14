@@ -10,8 +10,8 @@ namespace Vensy.Application.Authentication.Commands;
 
 public class RegisterCommandHandler : IRequestHandler<RegisterCommand, ErrorOr<RegisterResult>>
 {
-    private readonly UserManager<User> _userManager;
-    public RegisterCommandHandler(UserManager<User> userManager)
+    private readonly UserManager<ApplicationUser> _userManager;
+    public RegisterCommandHandler(UserManager<ApplicationUser> userManager)
     {
         _userManager = userManager;
     }
@@ -25,7 +25,7 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, ErrorOr<R
             return Error.Conflict("User.Exists", "User already Exists");
         }
 
-        User newUser = new() { Firstname = request.Firstname, Lastname = request.Lastname, Email = request.Email, UserName = request.Username };
+        ApplicationUser newUser = new() { Firstname = request.Firstname, Lastname = request.Lastname, Email = request.Email, UserName = request.Username };
         _userManager.UserValidators.Clear();
         var result = await _userManager.CreateAsync(newUser, request.Password);
 

@@ -12,8 +12,8 @@ using Vensy.Infrastructure.Persistence;
 namespace Vensy.Infrastructure.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20230702085525_ChangedToIdentity")]
-    partial class ChangedToIdentity
+    [Migration("20230714192516_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,7 +34,7 @@ namespace Vensy.Infrastructure.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("text")
-                        .HasColumnName("concurrency_stamp");
+                        .HasColumnName("concurrencyStamp");
 
                     b.Property<string>("Name")
                         .HasMaxLength(256)
@@ -44,10 +44,10 @@ namespace Vensy.Infrastructure.Migrations
                     b.Property<string>("NormalizedName")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)")
-                        .HasColumnName("normalized_name");
+                        .HasColumnName("normalizedName");
 
                     b.HasKey("Id")
-                        .HasName("pk_asp_net_roles");
+                        .HasName("pK_AspNetRoles");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
@@ -67,22 +67,22 @@ namespace Vensy.Infrastructure.Migrations
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("text")
-                        .HasColumnName("claim_type");
+                        .HasColumnName("claimType");
 
                     b.Property<string>("ClaimValue")
                         .HasColumnType("text")
-                        .HasColumnName("claim_value");
+                        .HasColumnName("claimValue");
 
                     b.Property<string>("RoleId")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("role_id");
+                        .HasColumnName("roleId");
 
                     b.HasKey("Id")
-                        .HasName("pk_asp_net_role_claims");
+                        .HasName("pK_AspNetRoleClaims");
 
                     b.HasIndex("RoleId")
-                        .HasDatabaseName("ix_asp_net_role_claims_role_id");
+                        .HasDatabaseName("iX_AspNetRoleClaims_roleId");
 
                     b.ToTable("AspNetRoleClaims", (string)null);
                 });
@@ -98,22 +98,22 @@ namespace Vensy.Infrastructure.Migrations
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("text")
-                        .HasColumnName("claim_type");
+                        .HasColumnName("claimType");
 
                     b.Property<string>("ClaimValue")
                         .HasColumnType("text")
-                        .HasColumnName("claim_value");
+                        .HasColumnName("claimValue");
 
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("user_id");
+                        .HasColumnName("userId");
 
                     b.HasKey("Id")
-                        .HasName("pk_asp_net_user_claims");
+                        .HasName("pK_AspNetUserClaims");
 
                     b.HasIndex("UserId")
-                        .HasDatabaseName("ix_asp_net_user_claims_user_id");
+                        .HasDatabaseName("iX_AspNetUserClaims_userId");
 
                     b.ToTable("AspNetUserClaims", (string)null);
                 });
@@ -122,26 +122,26 @@ namespace Vensy.Infrastructure.Migrations
                 {
                     b.Property<string>("LoginProvider")
                         .HasColumnType("text")
-                        .HasColumnName("login_provider");
+                        .HasColumnName("loginProvider");
 
                     b.Property<string>("ProviderKey")
                         .HasColumnType("text")
-                        .HasColumnName("provider_key");
+                        .HasColumnName("providerKey");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("text")
-                        .HasColumnName("provider_display_name");
+                        .HasColumnName("providerDisplayName");
 
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("user_id");
+                        .HasColumnName("userId");
 
                     b.HasKey("LoginProvider", "ProviderKey")
-                        .HasName("pk_asp_net_user_logins");
+                        .HasName("pK_AspNetUserLogins");
 
                     b.HasIndex("UserId")
-                        .HasDatabaseName("ix_asp_net_user_logins_user_id");
+                        .HasDatabaseName("iX_AspNetUserLogins_userId");
 
                     b.ToTable("AspNetUserLogins", (string)null);
                 });
@@ -150,17 +150,17 @@ namespace Vensy.Infrastructure.Migrations
                 {
                     b.Property<string>("UserId")
                         .HasColumnType("text")
-                        .HasColumnName("user_id");
+                        .HasColumnName("userId");
 
                     b.Property<string>("RoleId")
                         .HasColumnType("text")
-                        .HasColumnName("role_id");
+                        .HasColumnName("roleId");
 
                     b.HasKey("UserId", "RoleId")
-                        .HasName("pk_asp_net_user_roles");
+                        .HasName("pK_AspNetUserRoles");
 
                     b.HasIndex("RoleId")
-                        .HasDatabaseName("ix_asp_net_user_roles_role_id");
+                        .HasDatabaseName("iX_AspNetUserRoles_roleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
                 });
@@ -169,11 +169,11 @@ namespace Vensy.Infrastructure.Migrations
                 {
                     b.Property<string>("UserId")
                         .HasColumnType("text")
-                        .HasColumnName("user_id");
+                        .HasColumnName("userId");
 
                     b.Property<string>("LoginProvider")
                         .HasColumnType("text")
-                        .HasColumnName("login_provider");
+                        .HasColumnName("loginProvider");
 
                     b.Property<string>("Name")
                         .HasColumnType("text")
@@ -184,9 +184,99 @@ namespace Vensy.Infrastructure.Migrations
                         .HasColumnName("value");
 
                     b.HasKey("UserId", "LoginProvider", "Name")
-                        .HasName("pk_asp_net_user_tokens");
+                        .HasName("pK_AspNetUserTokens");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("Vensy.Domain.Models.ApplicationUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text")
+                        .HasColumnName("id");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("accessFailedCount");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("text")
+                        .HasColumnName("concurrencyStamp");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("email");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("boolean")
+                        .HasColumnName("emailConfirmed");
+
+                    b.Property<string>("Firstname")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("firstname");
+
+                    b.Property<string>("Lastname")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("lastname");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("boolean")
+                        .HasColumnName("lockoutEnabled");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("lockoutEnd");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("normalizedEmail");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("normalizedUserName");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("text")
+                        .HasColumnName("passwordHash");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("text")
+                        .HasColumnName("phoneNumber");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("boolean")
+                        .HasColumnName("phoneNumberConfirmed");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("text")
+                        .HasColumnName("securityStamp");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("boolean")
+                        .HasColumnName("twoFactorEnabled");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("userName");
+
+                    b.HasKey("Id")
+                        .HasName("pK_AspNetUsers");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex");
+
+                    b.ToTable("AspNetUsers", (string)null);
                 });
 
             modelBuilder.Entity("Vensy.Domain.Models.Appointment", b =>
@@ -201,30 +291,30 @@ namespace Vensy.Infrastructure.Migrations
                     b.Property<string>("CustomerEmail")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("customer_email");
+                        .HasColumnName("customerEmail");
 
                     b.Property<string>("CustomerPhone")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("customer_phone");
+                        .HasColumnName("customerPhone");
 
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("end_time");
+                        .HasColumnName("endTime");
 
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("start_time");
+                        .HasColumnName("startTime");
 
                     b.Property<int>("VenueId")
                         .HasColumnType("integer")
-                        .HasColumnName("venue_id");
+                        .HasColumnName("venueId");
 
                     b.HasKey("Id")
-                        .HasName("pk_appointments");
+                        .HasName("pK_appointments");
 
                     b.HasIndex("VenueId")
-                        .HasDatabaseName("ix_appointments_venue_id");
+                        .HasDatabaseName("iX_appointments_venueId");
 
                     b.ToTable("appointments", (string)null);
                 });
@@ -243,6 +333,14 @@ namespace Vensy.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("address");
 
+                    b.Property<int>("ApplicationUserId")
+                        .HasColumnType("integer")
+                        .HasColumnName("applicationUserId");
+
+                    b.Property<string>("ApplicationUserId1")
+                        .HasColumnType("text")
+                        .HasColumnName("applicationUserId1");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("text")
@@ -258,111 +356,44 @@ namespace Vensy.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("phone");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer")
-                        .HasColumnName("user_id");
-
-                    b.Property<string>("UserId1")
-                        .HasColumnType("text")
-                        .HasColumnName("user_id1");
-
                     b.HasKey("Id")
-                        .HasName("pk_companies");
+                        .HasName("pK_companies");
 
-                    b.HasIndex("UserId1")
-                        .HasDatabaseName("ix_companies_user_id1");
+                    b.HasIndex("ApplicationUserId1")
+                        .HasDatabaseName("iX_companies_applicationUserId1");
 
                     b.ToTable("companies", (string)null);
                 });
 
-            modelBuilder.Entity("Vensy.Domain.Models.User", b =>
+            modelBuilder.Entity("Vensy.Domain.Models.RefreshToken", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("text")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
                         .HasColumnName("id");
 
-                    b.Property<int>("AccessFailedCount")
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ApplicationUserId")
                         .HasColumnType("integer")
-                        .HasColumnName("access_failed_count");
+                        .HasColumnName("applicationUserId");
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
+                    b.Property<string>("ApplicationUserId1")
                         .HasColumnType("text")
-                        .HasColumnName("concurrency_stamp");
+                        .HasColumnName("applicationUserId1");
 
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)")
-                        .HasColumnName("email");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("boolean")
-                        .HasColumnName("email_confirmed");
-
-                    b.Property<string>("Firstname")
+                    b.Property<string>("Token")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("firstname");
-
-                    b.Property<string>("Lastname")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("lastname");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("boolean")
-                        .HasColumnName("lockout_enabled");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("lockout_end");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)")
-                        .HasColumnName("normalized_email");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)")
-                        .HasColumnName("normalized_user_name");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("text")
-                        .HasColumnName("password_hash");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("text")
-                        .HasColumnName("phone_number");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("boolean")
-                        .HasColumnName("phone_number_confirmed");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("text")
-                        .HasColumnName("security_stamp");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("boolean")
-                        .HasColumnName("two_factor_enabled");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)")
-                        .HasColumnName("user_name");
+                        .HasColumnName("token");
 
                     b.HasKey("Id")
-                        .HasName("pk_asp_net_users");
+                        .HasName("pK_refreshTokens");
 
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
+                    b.HasIndex("ApplicationUserId1")
+                        .HasDatabaseName("iX_refreshTokens_applicationUserId1");
 
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex");
-
-                    b.ToTable("AspNetUsers", (string)null);
+                    b.ToTable("refreshTokens", (string)null);
                 });
 
             modelBuilder.Entity("Vensy.Domain.Models.Venue", b =>
@@ -370,7 +401,7 @@ namespace Vensy.Infrastructure.Migrations
                     b.Property<int>("VenueId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasColumnName("venue_id");
+                        .HasColumnName("venueId");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("VenueId"));
 
@@ -385,7 +416,7 @@ namespace Vensy.Infrastructure.Migrations
 
                     b.Property<int>("CompanyId")
                         .HasColumnType("integer")
-                        .HasColumnName("company_id");
+                        .HasColumnName("companyId");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -403,10 +434,10 @@ namespace Vensy.Infrastructure.Migrations
                         .HasColumnName("phone");
 
                     b.HasKey("VenueId")
-                        .HasName("pk_venues");
+                        .HasName("pK_venues");
 
                     b.HasIndex("CompanyId")
-                        .HasDatabaseName("ix_venues_company_id");
+                        .HasDatabaseName("iX_venues_companyId");
 
                     b.ToTable("venues", (string)null);
                 });
@@ -418,27 +449,27 @@ namespace Vensy.Infrastructure.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_asp_net_role_claims_asp_net_roles_role_id");
+                        .HasConstraintName("fK_AspNetRoleClaims_AspNetRoles_roleId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Vensy.Domain.Models.User", null)
+                    b.HasOne("Vensy.Domain.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_asp_net_user_claims_asp_net_users_user_id");
+                        .HasConstraintName("fK_AspNetUserClaims_AspNetUsers_userId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Vensy.Domain.Models.User", null)
+                    b.HasOne("Vensy.Domain.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_asp_net_user_logins_asp_net_users_user_id");
+                        .HasConstraintName("fK_AspNetUserLogins_AspNetUsers_userId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
@@ -448,24 +479,24 @@ namespace Vensy.Infrastructure.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_asp_net_user_roles_asp_net_roles_role_id");
+                        .HasConstraintName("fK_AspNetUserRoles_AspNetRoles_roleId");
 
-                    b.HasOne("Vensy.Domain.Models.User", null)
+                    b.HasOne("Vensy.Domain.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_asp_net_user_roles_asp_net_users_user_id");
+                        .HasConstraintName("fK_AspNetUserRoles_AspNetUsers_userId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Vensy.Domain.Models.User", null)
+                    b.HasOne("Vensy.Domain.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_asp_net_user_tokens_asp_net_users_user_id");
+                        .HasConstraintName("fK_AspNetUserTokens_AspNetUsers_userId");
                 });
 
             modelBuilder.Entity("Vensy.Domain.Models.Appointment", b =>
@@ -475,19 +506,29 @@ namespace Vensy.Infrastructure.Migrations
                         .HasForeignKey("VenueId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_appointments_venues_venue_id");
+                        .HasConstraintName("fK_appointments_venues_venueId");
 
                     b.Navigation("Venue");
                 });
 
             modelBuilder.Entity("Vensy.Domain.Models.Company", b =>
                 {
-                    b.HasOne("Vensy.Domain.Models.User", "User")
+                    b.HasOne("Vensy.Domain.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("Companies")
-                        .HasForeignKey("UserId1")
-                        .HasConstraintName("fk_companies_users_user_id1");
+                        .HasForeignKey("ApplicationUserId1")
+                        .HasConstraintName("fK_companies_users_ApplicationUserId1");
 
-                    b.Navigation("User");
+                    b.Navigation("ApplicationUser");
+                });
+
+            modelBuilder.Entity("Vensy.Domain.Models.RefreshToken", b =>
+                {
+                    b.HasOne("Vensy.Domain.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("ApplicationUserId1")
+                        .HasConstraintName("fK_refreshTokens_users_ApplicationUserId1");
+
+                    b.Navigation("ApplicationUser");
                 });
 
             modelBuilder.Entity("Vensy.Domain.Models.Venue", b =>
@@ -497,19 +538,21 @@ namespace Vensy.Infrastructure.Migrations
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_venues_companies_company_id");
+                        .HasConstraintName("fK_venues_companies_companyId");
 
                     b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("Vensy.Domain.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("Companies");
+
+                    b.Navigation("RefreshTokens");
                 });
 
             modelBuilder.Entity("Vensy.Domain.Models.Company", b =>
                 {
                     b.Navigation("Venues");
-                });
-
-            modelBuilder.Entity("Vensy.Domain.Models.User", b =>
-                {
-                    b.Navigation("Companies");
                 });
 
             modelBuilder.Entity("Vensy.Domain.Models.Venue", b =>

@@ -1,20 +1,25 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Vensy.Domain.Models;
+using Vensy.Infrastructure.Config;
 
 namespace Vensy.Infrastructure.Persistence;
 
 
-public  class Context : IdentityDbContext<User>
+public class Context : IdentityDbContext<ApplicationUser>
 {
-    public DbSet<Company> Companies { get; set; }
-    public DbSet<Venue> Venues { get; set; }
-    public DbSet<Appointment> Appointments { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    public DbSet<Company> Companies { get; set; } = null!;
+    public DbSet<Venue> Venues { get; set; } = null!;
+    public DbSet<Appointment> Appointments { get; set; } = null!;
+
+    public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
+
+
+    public Context(DbContextOptions options) : base(options)
     {
-        optionsBuilder.UseNpgsql("Host=localhost;Database=testvensy;Username=anjolaoluwaakindipe;Password=daniel23082000")
-                      .UseSnakeCaseNamingConvention();
     }
+
 
 }
