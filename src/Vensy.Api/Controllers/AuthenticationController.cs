@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Vensy.Contracts.Authentication;
+using Vensy.Contracts.Authentication.Request;
+using Vensy.Contracts.Authentication.Response;
 using MediatR;
 using Vensy.Application.Authentication.Commands;
 using Vensy.Application.Authentication.Queries;
@@ -59,8 +60,9 @@ public class AuthenticationController : ApiControllerBase
     }
 
     [HttpPost("/refresh")]
-    public async Task<IActionResult> Refresh()
-    {
+    public async Task<IActionResult> Refresh(RefreshTokenRequest request)
+    {   
+        ValidateRefreshTokenQuery query = new ValidateRefreshTokenQuery(request.RefreshToken);
         await Task.CompletedTask;
         return Ok();
     }
