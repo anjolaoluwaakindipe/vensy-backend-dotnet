@@ -1,9 +1,7 @@
 using System.Net;
-using System.ComponentModel;
 using ErrorOr;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.ObjectPool;
 using Vensy.Application.Authentication.Common;
 using Vensy.Domain.Models;
 using Microsoft.AspNetCore.Http;
