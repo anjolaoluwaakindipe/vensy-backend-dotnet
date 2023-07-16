@@ -25,8 +25,6 @@ public class LoginQueryHandler : IRequestHandler<LoginQuery, ErrorOr<LoginResult
         _jwtService = jwtService;
     }
 
-
-
     public async Task<ErrorOr<LoginResult>> Handle(LoginQuery request, CancellationToken cancellationToken)
     {
         //  Check if user login is successful
@@ -57,4 +55,6 @@ public class LoginQueryHandler : IRequestHandler<LoginQuery, ErrorOr<LoginResult
         // return login result
         return new LoginResult(user.Email ?? "", user.Lastname, user.Firstname, user.UserName ?? "", accessToken, refreshToken);
     }
+
+    
 }

@@ -64,7 +64,6 @@ public class ValidateRefreshTokenQueryHandler : IRequestHandler<ValidateRefreshT
 
     private async Task<Tokens> GenerateTokens(ApplicationUser user)
     {
-
         var userRoles = await _userManager.GetRolesAsync(user);
 
         var authClaims = new List<Claim>(){
@@ -84,5 +83,4 @@ public class ValidateRefreshTokenQueryHandler : IRequestHandler<ValidateRefreshT
         return new Tokens(accessToken, refreshToken);
     }
 
-    private record Tokens(string AccessToken, string RefreshToken);
 }
