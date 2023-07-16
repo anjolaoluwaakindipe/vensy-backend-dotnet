@@ -38,16 +38,13 @@ public class AuthenticationController : ApiControllerBase
 
         var result = await _sender.Send(query);
 
-        if (result.IsError)
-        {
-            return Problem(result.Errors);
-        }
+        if (result.IsError) return Problem(result.Errors);
 
         await _sender.Send(new UpdateUserRefreshTokenCommand(
             _httpContAcc.HttpContext?.Request.Cookies["refreshToken"],
             result.Value.RefreshToken,
             result.Value.Email));
-            
+
         var value = result.Value;
 
         return Ok(new LoginResponse(
@@ -61,10 +58,25 @@ public class AuthenticationController : ApiControllerBase
 
     [HttpPost("/refresh")]
     public async Task<IActionResult> Refresh(RefreshTokenRequest request)
-    {   
-        ValidateRefreshTokenQuery query = new ValidateRefreshTokenQuery(request.RefreshToken);
-        await Task.CompletedTask;
-        return Ok();
+    {
+        ValidateRefreshTokenQuery query = new(RefreshToken: request.RefreshToken);
+        var result = await _sender.Send(query);
+
+        if (result.IsError) return Problem(result.Errors);
+
+
+        await _sender.Send(new UpdateUserRefreshTokenCommand(
+            request.RefreshToken,
+            result.Value.RefreshToken,
+            result.Value.Email));
+
+        return Ok(new RefreshTokenRespone(
+            result.Value.Firstname,
+            result.Value.Lastname,
+            result.Value.Username,
+            result.Value.Email,
+            result.Value.AccessToken,
+            result.Value.RefreshToken));
     }
 
 }

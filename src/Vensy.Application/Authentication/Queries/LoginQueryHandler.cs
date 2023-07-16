@@ -51,8 +51,8 @@ public class LoginQueryHandler : IRequestHandler<LoginQuery, ErrorOr<LoginResult
         }
 
         // create refresh and access tokens
-        string accessToken = _jwtService.GenerateAccessToken(authClaims);
-        string refreshToken = _jwtService.GenerateRefreshToken(authClaims);
+        string accessToken = _jwtService.GenerateAccessToken(claims: authClaims);
+        string refreshToken = _jwtService.GenerateRefreshToken(claims: authClaims);
 
         // return login result
         return new LoginResult(user.Email ?? "", user.Lastname, user.Firstname, user.UserName ?? "", accessToken, refreshToken);
