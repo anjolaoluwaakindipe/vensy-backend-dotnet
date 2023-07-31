@@ -1,0 +1,42 @@
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build-env
+WORKDIR /App
+
+# Railway Environment Variables
+ARG PORT
+ARG Database
+ARG Host
+ARG Password
+ARG Username
+ARG AccessTokenValidity
+ARG RefreshTokenSecret
+ARG RefreshTokenValidity
+ARG Issuer
+ARG Audience
+ARG AccessTokenSecret
+
+ENV DatabaseSettings__Postgres__Host=$Host
+ENV DatabaseSettings__Postgres__Database=$Database
+ENV DatabaseSettings__Postgres__Password=$Password
+ENV DatabaseSettings__Postgres__Username=$Username
+ENV JwtSettings__AccessTokenSecret=$AccessTokenSecret
+ENV JwtSettings__AcceessTokenValidity=$RefressTokenValidity
+ENV JwtSettings__RefreshTokenSecret=$RefreshTokenSecret
+ENV JwtSettings__RefreshTokenValidity=$RefreshTokenValidity
+ENV JwtSettings__Issuer=$Issuer
+ENV JwtSettings__Audience=$Audience
+ENV PORT=$PORT
+
+# Copy everything
+COPY . ./
+# Restore as distinct layers
+RUN dotnet restore
+# Build and publish a release
+RUN dotnet publish -c Release -o out
+# Make migrations to database
+RUN dotnet-ef database update --startup-project ./src/Vensy.Api --project ./src/Vensy.Infrastructure
+
+# Build runtime image
+FROM mcr.microsoft.com/dotnet/aspnet:7.0
+WORKDIR /App
+COPY --from=build-env /App/out .
+ENTRYPOINT ["dotnet", "Vensy.Api.dll", "--url", "http://0.0.0.0:${PORT}"]
