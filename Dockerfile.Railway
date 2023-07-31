@@ -33,7 +33,7 @@ RUN dotnet restore
 # Build and publish a release
 RUN dotnet publish -c Release -o out
 # Make migrations to database
-RUN dotnet-ef database update --startup-project ./src/Vensy.Api --project ./src/Vensy.Infrastructure
+RUN dotnet ef database update --startup-project ./src/Vensy.Api --project ./src/Vensy.Infrastructure
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:7.0
