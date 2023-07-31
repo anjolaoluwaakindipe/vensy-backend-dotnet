@@ -37,10 +37,10 @@ RUN dotnet publish -c Release -o out
 # Make migrations to database
 RUN dotnet tool restore
 RUN dotnet ef database update --startup-project ./src/Vensy.Api --project ./src/Vensy.Infrastructure
-RUN echo PORT
+RUN echo ${PORT}
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:7.0
 WORKDIR /App
 COPY --from=build-env /App/out .
-ENTRYPOINT ["dotnet", "Vensy.Api.dll", "--urls=\"http://0.0.0.0:${PORT}\""]
+ENTRYPOINT ["dotnet", "Vensy.Api.dll", "--urls=http://0.0.0.0:${PORT}"]
