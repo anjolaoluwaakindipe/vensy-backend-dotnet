@@ -3,10 +3,10 @@ WORKDIR /App
 
 # Railway Environment Variables
 ARG PORT
-ARG Database
-ARG Host
-ARG Password
-ARG Username
+ARG PGDATABASE
+ARG PGHOST
+ARG PGPASSWORD
+ARG PGUSER
 ARG AccessTokenValidity
 ARG RefreshTokenSecret
 ARG RefreshTokenValidity
@@ -14,10 +14,10 @@ ARG Issuer
 ARG Audience
 ARG AccessTokenSecret
 
-ENV DatabaseSettings__Postgres__Host=$Host
-ENV DatabaseSettings__Postgres__Database=$Database
-ENV DatabaseSettings__Postgres__Password=$Password
-ENV DatabaseSettings__Postgres__Username=$Username
+ENV DatabaseSettings__Postgres__Host=$PGHOST
+ENV DatabaseSettings__Postgres__Database=$PGDATABASE
+ENV DatabaseSettings__Postgres__Password=$PGPASSWORD
+ENV DatabaseSettings__Postgres__Username=$PGUSER
 ENV JwtSettings__AccessTokenSecret=$AccessTokenSecret
 ENV JwtSettings__AcceessTokenValidity=$RefressTokenValidity
 ENV JwtSettings__RefreshTokenSecret=$RefreshTokenSecret
