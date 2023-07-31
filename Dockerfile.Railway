@@ -43,4 +43,4 @@ RUN echo PORT
 FROM mcr.microsoft.com/dotnet/aspnet:7.0
 WORKDIR /App
 COPY --from=build-env /App/out .
-ENTRYPOINT ["dotnet", "Vensy.Api.dll", "--urls", "http://0.0.0.0:${PORT}"]
+ENTRYPOINT ["dotnet", "Vensy.Api.dll", "--urls=http://0.0.0.0:${PORT}"]
