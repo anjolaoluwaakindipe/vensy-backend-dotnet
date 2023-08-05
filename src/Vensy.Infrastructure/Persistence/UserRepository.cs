@@ -1,8 +1,5 @@
-using System.Reflection.Metadata;
-using System;
-using Vensy.Application.Interfaces.Persistence;
 using Vensy.Domain.Models;
-using System.Security.Principal;
+using Vensy.Application.Common.Interfaces.Persistence;
 
 namespace Vensy.Infrastructure.Persistence;
 
@@ -30,8 +27,15 @@ public class UserRepository : IUserRepository
 
     }
 
-    public void Save(ApplicationUser user)
+    public async Task Save(ApplicationUser user)
+    {
+        await _context.Users.AddAsync(user);
+        await _context.SaveChangesAsync();
+    }
+
+    void IUserRepository.Save(ApplicationUser user)
     {
         _context.Users.Add(user);
+        _context.SaveChanges();
     }
 }

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using Vensy.Application.Common.Interfaces.Services;
+using Vensy.Application.Common.Error;
 
 namespace Vensy.Application.Authentication.Queries;
 
@@ -30,7 +31,7 @@ public class LoginQueryHandler : IRequestHandler<LoginQuery, ErrorOr<LoginResult
 
         if (user is null || !await _userManager.CheckPasswordAsync(user, request.Password))
         {
-            return Error.Custom(StatusCodes.Status401Unauthorized, code: "Invalid.Email", description: "Invalid username or password");
+            return AppError.UnauthorizedError(message: "Invalid username or password", code: "Invalid.Email");
         };
 
         //  get user roles
@@ -54,5 +55,5 @@ public class LoginQueryHandler : IRequestHandler<LoginQuery, ErrorOr<LoginResult
         return new LoginResult(user.Email ?? "", user.Lastname, user.Firstname, user.UserName ?? "", accessToken, refreshToken);
     }
 
-    
+
 }

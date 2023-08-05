@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Vensy.Application.Common.Interfaces.Services;
-using Vensy.Application.Interfaces.Persistence;
+using Vensy.Application.Common.Interfaces.Persistence;
 using Vensy.Domain.Models;
 using Vensy.Infrastructure.Config;
 using Vensy.Infrastructure.Persistence;
@@ -16,8 +16,7 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, ConfigurationManager configuration)
     {
-        services.Configure<JwtSetting>(configuration.GetSection(JwtSetting.Name));
-        services.Configure<PostgresDatabaseSettings>(configuration.GetSection(PostgresDatabaseSettings.PropertyName));
+        AddConfigurations(in services, in configuration);
         services.AddDbContext<Context>(options =>
         {
             var postgresSettings = configuration.GetSection(PostgresDatabaseSettings.PropertyName).Get<PostgresDatabaseSettings>();
@@ -25,10 +24,27 @@ public static class DependencyInjection
         });
         services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<Context>().AddDefaultTokenProviders();
         services.Configure<IdentityOptions>(IdentityOptionsConfiguration);
-        services.AddScoped<IUserRepository, UserRepository>();
+        AddPersitence(in services);
+        AddServices(in services);
+        return services;
+    }
+
+    public static void AddConfigurations(in IServiceCollection services, in ConfigurationManager configuration)
+    {
+        services.Configure<JwtSetting>(configuration.GetSection(JwtSetting.Name));
+        services.Configure<PostgresDatabaseSettings>(configuration.GetSection(PostgresDatabaseSettings.PropertyName));
+    }
+
+    public static void AddServices(in IServiceCollection services)
+    {
         services.AddScoped<IJwtService, JwtService>();
         services.AddScoped<IDateTimeProvider, DateTimeProvider>();
-        return services;
+    }
+
+    public static void AddPersitence(in IServiceCollection services)
+    {
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<ICompanyRepository, CompanyRepository>();
     }
 
     public static void IdentityOptionsConfiguration(IdentityOptions options)

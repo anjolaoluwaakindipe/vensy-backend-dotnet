@@ -1,5 +1,5 @@
 using MediatR;
-using Vensy.Application.Interfaces.Persistence;
+using Vensy.Application.Common.Interfaces.Persistence;
 
 namespace Vensy.Application.Authentication.Commands;
 
@@ -15,12 +15,13 @@ public class UpdateUserRefreshTokenCommandHandler : IRequestHandler<UpdateUserRe
 
     public Task Handle(UpdateUserRefreshTokenCommand request, CancellationToken cancellationToken)
     {
-        var user =  _userRepository.FindByEmail(email: request.Email);
-        if(user is null)
+        var user = _userRepository.FindByEmail(email: request.Email);
+        if (user is null)
             return Task.CompletedTask;
         var oldToken = user.RefreshTokens.Where(refreshToken => refreshToken.Token == request.OldToken).First();
-        if (request.OldToken is null ){
-            user.RefreshTokens.Add(new(){Token= request.NewToken});
+        if (request.OldToken is null)
+        {
+            user.RefreshTokens.Add(new() { Token = request.NewToken });
             return Task.CompletedTask;
         }
         oldToken.Token = request.NewToken;

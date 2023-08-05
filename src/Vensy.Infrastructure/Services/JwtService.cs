@@ -4,7 +4,6 @@ using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Vensy.Application.Common.Interfaces.Services;
-using Vensy.Application.Interfaces.Persistence;
 using Vensy.Infrastructure.Config;
 
 namespace Vensy.Infrastructure.Services;

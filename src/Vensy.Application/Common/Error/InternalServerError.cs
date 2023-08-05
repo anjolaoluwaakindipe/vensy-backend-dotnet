@@ -1,16 +1,21 @@
-using System.Net;
-using Vensy.Application.Interfaces;
+
+using Microsoft.AspNetCore.Http;
 
 namespace Vensy.Application.Common.Error;
 
-
-public class InternalServerError : ServiceException<string>
-{
-    public InternalServerError(string message, Exception innerException) : base(message, innerException, HttpStatusCode.InternalServerError)
-    {
+public static partial class AppError{
+    public static ErrorOr.Error InternalServerError(string message, string code){
+        return ErrorOr.Error.Custom(
+            StatusCodes.Status500InternalServerError,
+            code,
+            message
+        );
     }
-
-    public InternalServerError(string message) : base(message, HttpStatusCode.InternalServerError)
-    {
+    public static ErrorOr.Error InternalServerError(string message){
+        return ErrorOr.Error.Custom(
+            StatusCodes.Status500InternalServerError,
+            "InternalServer.Error",
+            message
+        );
     }
 }

@@ -22,7 +22,7 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, ErrorOr<R
 
         if (existingUser is not null)
         {
-            return Error.Conflict("User.Exists", "User already Exists");
+            return AppError.ConflictError("User already Exists","User.Exists");
         }
 
         ApplicationUser newUser = new() { Firstname = request.Firstname, Lastname = request.Lastname, Email = request.Email, UserName = request.Username };
@@ -31,7 +31,7 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, ErrorOr<R
 
         if (!result.Succeeded)
         {
-            return result.Errors.Select(err => Error.Validation(err.Code, err.Description)).ToList();
+            return result.Errors.Select(err => AppError.ValidationError(err.Description, err.Code)).ToList();
         }
 
         return new RegisterResult("Registration Successful");

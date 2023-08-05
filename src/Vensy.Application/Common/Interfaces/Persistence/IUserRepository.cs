@@ -1,5 +1,5 @@
 using Vensy.Domain.Models;
-namespace Vensy.Application.Interfaces.Persistence;
+namespace Vensy.Application.Common.Interfaces.Persistence;
 
 
 public interface IUserRepository
