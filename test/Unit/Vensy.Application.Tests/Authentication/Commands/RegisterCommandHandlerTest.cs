@@ -1,4 +1,5 @@
 using ErrorOr;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Moq;
 using Vensy.Application.Authentication.Commands;
@@ -77,7 +78,7 @@ public class RegisterCommandHandlerTest
         // Assert
         Assert.NotNull(result.Errors);
         Assert.Equal(1, result.Errors.Count);
-        Assert.Equal(ErrorType.Conflict, result.Errors[0].Type);
+        Assert.Equal(StatusCodes.Status409Conflict, (int) result.Errors[0].Type);
         userManagerMoq.Verify(mock => mock.FindByEmailAsync(registerCommand.Email), Times.Once);
     }
 }

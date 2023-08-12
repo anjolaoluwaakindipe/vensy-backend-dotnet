@@ -13,6 +13,21 @@ public class CompanyRepository : ICompanyRepository
         _context = context;
     }
 
+    public bool DoesCompanyExist(int Id)
+    {
+        return _context.Companies.Any(company=> company.Id == Id);
+    }
+
+    public Company FindCompanyById(int Id)
+    {
+        return _context.Companies.First(company => company.Id ==Id);
+    }
+
+    public async Task<Company> FindCompanyByIdAsync(int Id)
+    {
+        return _context.Companies.First(company => company.Id ==Id);
+    }
+
     public Company SaveCompany(Company company)
     {
         _context.Add(company);
@@ -26,4 +41,19 @@ public class CompanyRepository : ICompanyRepository
         await _context.SaveChangesAsync();
         return company;
     }
+
+    public Company UpdateCompany(Company company)
+    {
+        _context.Update(company);
+        _context.SaveChanges();
+        return company;
+    }
+
+    public async Task<Company> UpdateCompanyAsync(Company company)
+    {
+        _context.Update(company);
+        await _context.SaveChangesAsync();
+        return company;
+    }
+
 }

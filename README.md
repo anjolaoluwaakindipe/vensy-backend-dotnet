@@ -1,0 +1,2 @@
+# VENSY
+This is the source code for the vensy applicaton made with .Net and Next.js. It was made to help with my family's business and with clean architecture in mind. It was a fun processes learning .Net for backend development and learning libraries like Mediatr, ErrorOr, XUnit, EntityFrameworkCore and more
